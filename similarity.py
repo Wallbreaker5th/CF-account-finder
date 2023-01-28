@@ -29,7 +29,7 @@ def similarity(a: List[str], b: List[str], n_gram: Union[int, Iterable[int]] = [
                 t = t.replace('\t'*i, chr(0xf000+i))
 
             for n in n_gram:
-                for i in range(len(s)-n+1):
+                for i in range(len(t)-n+1):
                     substr = t[i:i+n]
                     if substr not in vec:
                         vec[substr] = 0
