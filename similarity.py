@@ -46,3 +46,28 @@ def similarity(a: List[str], b: List[str], n_gram: Union[int, Iterable[int]] = [
         if i in vec_b:
             dot += vec_a[i]*vec_b[i]
     return dot/norm_a/norm_b
+
+
+def get_vector(code: List[str], length=10007, n_gram: Union[int, Iterable[int]] = [3, 4]) -> np.ndarray:
+    # Return a vector that represents the style of the code.
+    # Use np.dot(vector_1, vector_2) to calculate the similarity.
+    def hash(s: str, mod=length) -> int:
+        res = 0
+        for i in bytes(s, encoding="utf8"):
+            res = (res*257+i) % mod
+        return res
+    vec = np.zeros(length)
+    for s in code:
+        t = s
+
+        # It can be faster.
+        for i in range(40, 0, -1):
+            t = t.replace(' '*i, chr(0xe000+i))
+        for i in range(10, 0, -1):
+            t = t.replace('\t'*i, chr(0xf000+i))
+
+        for n in n_gram:
+            for i in range(len(t)-n+1):
+                substr = t[i:i+n]
+                vec[hash(substr) % length] += 1
+    return vec/np.linalg.norm(vec)
