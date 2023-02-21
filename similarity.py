@@ -1,5 +1,6 @@
 from typing import *
 import numpy as np
+import os
 
 
 def norm(vec: Mapping[str, int]):
@@ -71,3 +72,22 @@ def get_vector(code: List[str], length=10007, n_gram: Union[int, Iterable[int]] 
                 substr = t[i:i+n]
                 vec[hash(substr) % length] += 1
     return vec/np.linalg.norm(vec)
+
+
+def compress(code: List[str]):
+    return [i.replace(' ', '').replace(
+            '\n', '').replace('\t', '') for i in code]
+
+
+def preprocess(code: List[str]):
+    ret = []
+    for i in code:
+        f = open("tmp.cpp", "w", encoding="utf8")
+        f.write(i)
+        f.close()
+        os.system("g++ -E tmp.cpp > tmp.preprocessed.cpp -DONLINE_JUDGE")
+        g = open("tmp.preprocessed.cpp", encoding="utf8")
+        res = g.readlines()
+        cut = max(j for j, k in enumerate(res) if k.startswith('#'))
+        ret.append(''.join(res[cut+1:]))
+    return ret
