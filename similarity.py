@@ -49,7 +49,7 @@ def similarity(a: List[str], b: List[str], n_gram: Union[int, Iterable[int]] = [
 
 
 def get_vector(code: List[str], length=10007, n_gram: Union[int, Iterable[int]] = [3, 4]) -> np.ndarray:
-    # Return a vector that represents the style of the code.
+    # Return a vector that represents the style of the code and has a length of 1.0.
     # Use np.dot(vector_1, vector_2) to calculate the similarity.
     def hash(s: str, mod=length) -> int:
         res = 0

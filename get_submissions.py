@@ -40,6 +40,7 @@ def get_submissions(handle: str, count: int, count_unique: int):
                      "Cookie": COOKIE,
                      "origin": "https://codeforces.com"})
         if r.text.find(str(id))==-1:
+            probs.add(prob)
             continue
         bs = BeautifulSoup(r.text, features="html.parser")
         code = bs.find("pre").text
